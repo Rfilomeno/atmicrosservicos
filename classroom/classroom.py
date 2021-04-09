@@ -11,6 +11,7 @@ from dateutil import parser
 import sys
 sys.path.insert(1, f"{project_dir}/../services/")
 sys.path.insert(2, f"{project_dir}/../tasks_service/")
+sys.path.insert(3, f"{project_dir}/../perform_task_service/")
 from ServiceMapping import ClassServiceHandler
 ####
 

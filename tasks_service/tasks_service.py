@@ -11,16 +11,12 @@ from dateutil import parser
 import sys
 sys.path.insert(1, f"{project_dir}/../services/")
 sys.path.insert(2, f"{project_dir}/../tasks_service/")
+sys.path.insert(3, f"{project_dir}/../perform_task_service/")
 from ServiceMapping import ClassServiceHandler
 ####
 
 
-# Models
-class TaskEnum(Enum):
-    finished = "F"
-    partial = "P"
-    notfinished = "N"
-    
+  
 
 class Tarefas(db.Model):
     __tablename__ = "tasks3"
@@ -34,10 +30,9 @@ class Tarefas(db.Model):
     finished = db.Column(db.Boolean(), default=False)    
 
 class TasksSchema(ma.SQLAlchemyAutoSchema):
-    presence = EnumField(TaskEnum, by_value=True)
     class Meta:
         model = Tarefas
-        fields = ["id", "student_name", "student_id", "task_name", "done", "finished"]
+        
 
 task_schema = TasksSchema()
 all_task_schema = TasksSchema(many = True)
