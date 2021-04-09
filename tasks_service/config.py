@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
-database_name = "tasks2.db"
+database_name = "tasks3.db"
 database_file = "sqlite:///{}".format(os.path.join(project_dir, database_name))
 
 app = Flask(__name__)

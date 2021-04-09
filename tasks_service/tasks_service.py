@@ -23,20 +23,21 @@ class TaskEnum(Enum):
     
 
 class Tarefas(db.Model):
-    __tablename__ = "tasks2"
+    __tablename__ = "tasks3"
     id = db.Column(db.Integer, primary_key=True)
     classcode = db.Column(db.String(256), nullable=True)
     classname = db.Column(db.String(256), nullable=True)
     student_name = db.Column(db.String(256), nullable=True)
     student_id = db.Column(db.Integer(), nullable=True)
     task_name = db.Column(db.String(256), nullable=True)
+    done = db.Column(db.Boolean(), default=False) 
     finished = db.Column(db.Boolean(), default=False)    
 
 class TasksSchema(ma.SQLAlchemyAutoSchema):
     presence = EnumField(TaskEnum, by_value=True)
     class Meta:
         model = Tarefas
-        fields = ["id", "student_name", "student_id", "task_name", "finished"]
+        fields = ["id", "student_name", "student_id", "task_name", "done", "finished"]
 
 task_schema = TasksSchema()
 all_task_schema = TasksSchema(many = True)
@@ -61,6 +62,7 @@ def take_task():
         "student_name" : s["name"],
         "student_id" : int(s["id"]),
         "task_name" : request.form["taskname"],
+        "done" : False,
         "finished" : False
         }
         task = Tarefas(**new_data)
@@ -70,10 +72,16 @@ def take_task():
     result = Tarefas.query.all()
     return jsonify(all_task_schema.dump(result))
 
-@app.route("/api/task/<student_id>", methods=["GET"])
-def task_by_student_id(student_id):
-    result = Tarefas.query.get(student_id)
+@app.route("/api/task/<task_id>", methods=["GET"])
+def task_by_id(task_id):
+    result = Tarefas.query.get(task_id)
     return task_schema.jsonify(result)
+
+
+@app.route("/api/tasks", methods=["GET"])
+def get_tasks():
+    result = Tarefas.query.all()
+    return jsonify(all_task_schema.dump(result))
 
 if __name__ == "__main__":
     if not os.path.exists(database_file):
